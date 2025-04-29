@@ -9,7 +9,7 @@ addbtn.addEventListener('click',addTodo);
 
 todolist.addEventListener('click',handletodoClick);
 function addTodo(){
-    const task=todoinput.ariaValueMax.trim();
+    const task = todoinput.value.trim();
     if(task===" "){
         alert("Please Enter a task!!!!");
         return;
