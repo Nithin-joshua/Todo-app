@@ -1,45 +1,46 @@
-const addbtn=document.getElementById('add-btn');
-const todoinput=document.getElementById('todo-input');
-const todolist=document.getElementById('todo-list');
+const addBtn = document.getElementById('add-btn');
+const todoInput = document.getElementById('todo-input');
+const todoList = document.getElementById('todo-list');
+
 
 document.addEventListener('DOMContentLoaded', loadTodos);
 
+addBtn.addEventListener('click', addTodo);
+todoList.addEventListener('click', handleTodoClick);
 
-addbtn.addEventListener('click',addTodo);
-
-todolist.addEventListener('click',handletodoClick);
-function addTodo(){
-    const task = todoinput.value.trim();
-    if(task===" "){
-        alert("Please Enter a task!!!!");
-        return;
-    }
+function addTodo() {
+    const task = todoInput.value.trim();
+    if (task === '') {
+    alert('Please enter a task!');
+    return;
+}
 
     createTodoElement(task);
-    saveTodo(task);
+    saveTodo(task); 
 
-    todoinput.value=" ";
+    todoInput.value = '';
 }
-function createTodoElement(task,completed=false){
+
+function createTodoElement(task, completed = false) {
     const li = document.createElement('li');
-    li.className=`todo-item ${completed ? 'completed':' ' }`;
-    li.innerHTML= `
+    li.className = `todo-item ${completed ? 'completed' : ''}`;
+    li.innerHTML = `
     <span>${task}</span>
-    <button class ="delete-btn>X<button>
-    `;
-
-    todoinput.appendChild(li);
+    <button class="delete-btn">X</button>`;
+    todoList.appendChild(li);
 }
 
-function handletodoClick(e) {
-    if(e.target.classList.contains('delete-btn')){
+function handleTodoClick(e) {
+    if (e.target.classList.contains('delete-btn')) {
         const item = e.target.parentElement;
         removeTodo(item);
-    } else if(e.target.tagName === 'SPAN'){
-        e.target.parentElement.classList.toggle('completed');
-        updateTodoStorage();
-    }
+        item.remove();
+} else if (e.target.tagName === 'SPAN') {
+    e.target.parentElement.classList.toggle('completed');
+    updateTodoStorage();
 }
+}
+
 function saveTodo(task) {
     let todos = JSON.parse(localStorage.getItem('todos')) || [];
     todos.push({ task, completed: false });
@@ -64,6 +65,6 @@ function updateTodoStorage() {
         task: item.querySelector('span').innerText,
         completed: item.classList.contains('completed')
     });
-    });
+});
     localStorage.setItem('todos', JSON.stringify(allTodos));
 }
